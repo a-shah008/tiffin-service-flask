@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+    {% block main_content %}
+
+        <div class="container-fluid">
+            <div style="padding-top: 75px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex flex-row align-items-center">
+                        <h2 class="mt-1">Admin Panel</h2>
+                    </div><a href="{{ url_for('home') }}" type="button" style="width: 200px;" class="text-center btn btn-small btn-warning">Return Home</a>
+                </div>
+                
+                <br>
+                <hr>
+                <br>
+            </div>
+        </div>
+            <div class="col-sm mr-5">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex flex-row align-items-center">
+                        <h3 class="mt-1">Orders</h3>
+                    </div><a href="{{ url_for('new_admin_order') }}" type="button" style="width: 200px;" class="text-center btn btn-small btn-info">Create New Order</a>
+                </div><hr>
+                {% if all_available_orders %}
+                
+                    <div style="padding-top: 25px;" class="container mt-3 mb-3">
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row my-5 card-wrapper">
+                                    {% for current_available_order in all_available_orders %}
+                                        <div class="col-lg-4 col-md-6 mb-4">
+                                            <div class="card h-100" style="background-color: lightgray;">
+                                                <div class="embed-responsive embed-responsive-16by9">
+                                                    <img class="card-img-top embed-responsive-item" src="{{ current_available_order.image_file }}">
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="text-muted d-flex justify-content-between mt-2"> <span class="fw-500"><h4 class="card-title">{{ current_available_order.name }}</h4></span> <span><h5>{{ "${:,.2f}".format(current_available_order.unit_price) }}</h5></span> </div>
+                                                    <hr>
+                                                    <h5>
+                                                        
+                                                    </h5>
+                                                    <p style="padding-top: 7px;" class="card-text">Contains: <b>{{ current_available_order.contents }}</b></p>
+                                                    <hr>
+                                                    <p style="padding-top: 7px;" class="card-text">Date Created (M-D-Y): <b>{{ current_available_order.date_created.strftime('%m-%d-%Y') }}</b></p>
+                                                    <hr>
+                                                    {% if current_available_order.currently_active_order == True %}
+                                                        Currently Active Order:<b class="text-success">
+                                                            True
+                                                        </b>
+                                                    {% else %}
+                                                    Currently Active Order:<b class="text-danger"> False</b>
+                                                    {% endif %}
+                                                    <hr>
+                                                    <div class="text-center">
+                                                        <div class="dropright">
+                                                            <button type="button" class="mt-0 btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Options
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                {% if current_available_order.currently_active_order == True %}
+                                                                    <form action="/admin_panel" enctype="multipart/form-data" method="POST">
+                                                                        <input type="hidden" id="make_inactive" name="make_inactive" value="{{ current_available_order.name }}"><button class="btn btn-info ml-2 mb-2 mr-2 text-center">Make Inactive</button>
+                                                                    </form>
+                                                                {% else %}
+                                                                    <form action="/admin_panel" enctype="multipart/form-data" method="POST">
+                                                                        <input type="hidden" id="make_active" name="make_active" value="{{ current_available_order.name }}"><button class="btn btn-info ml-2 mb-2 mr-2 text-center">Make Active</button>
+                                                                    </form>
+                                                                {% endif %}
+                                                                <form action="/admin_panel" enctype="multipart/form-data" method="POST">
+                                                                    <input type="hidden" id="edit_order_details" name="edit_order_details" value="{{ current_available_order.name }}"><button class="btn btn-info ml-2 mb-2 mr-2 text-center">Edit Order Details</button>
+                                                                </form>
+                                                                <form action="/admin_panel" enctype="multipart/form-data" method="POST">
+                                                                    <input type="hidden" id="view_comments" name="view_comments" value="{{ current_available_order.name }}"><button class="btn btn-info ml-2 mb-2 mr-2 text-center">View All Comments</button>
+                                                                </form>
+                                                                <form action="/admin_panel" enctype="multipart/form-data" method="POST">
+                                                                    <input type="hidden" id="delete_order" name="delete_order" value="{{ current_available_order.name }}"><button class="btn btn-warning ml-2 mb-2 mr-2 text-center">Delete Order</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                
+                    
+                {% else %}
+                    <p>You do not have any currently active orders.</p>
+                {% endif %}
+            <hr>
+        </div>
+        <br>
+
+        <div class="container">
+            <h3>All Comments on Dishes</h3>
+            {% for order in recent_orders %}
+                <div class="card post mt-4" style="background: lightgrey; padding:25px;">
+                    <div class="post-heading">
+                        <div class="float-left image">
+                            <img src="{{ url_for('static', filename='profile_pics/default.jpg') }}" class="img-circle avatar mr-3" alt="user profile image" width="97px" height="97px">
+                        </div>
+                        <div class="float-left meta">
+                            <div class="title h3">
+                                {{ comment.title }}
+                            </div>
+                            <div class="title h5">
+                                by {{ comment.author_display_name }}
+                            </div>
+                            <h5 class="text-muted time">Date Created (M-D-Y): {{ comment.date_created.strftime('%m-%d-%Y') }}</h5>
+                        </div>
+                    </div> 
+                    <div class="post-description">
+                        <hr>
+                        <p>{{ comment.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div><br><br><br><br>
+
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    {% endblock main_content %}

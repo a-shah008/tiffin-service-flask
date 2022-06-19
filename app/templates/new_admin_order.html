@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+    {% block main_content %}
+        <div class="container-fluid">
+            <div style="padding-top: 75px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex flex-row align-items-center">
+                        <h2 class="mt-1">Create New Admin Order</h2>
+                    </div><a href="{{ url_for('admin_panel') }}" type="button" style="width: 200px;" class="text-center btn btn-small btn-warning">Return to Admin Panel</a>
+                </div>
+            </div>
+            <hr>
+
+            <div style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px; padding-top: 0px;" class="mt-5 container">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex flex-row align-items-center">
+                                    {{ form.name.label(class="form-control-label") }}
+                                </div><p class="text-danger"><b>Required Field</b></p>
+                            </div>
+                            {% if form.name.errors %}
+                                {{ form.name(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.name(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex flex-row align-items-center">
+                                    {{ form.contents.label(class="form-control-label") }}
+                                </div><p class="text-danger"><b>Required Field</b></p>
+                            </div>
+                            {% if form.contents.errors %}
+                                {{ form.contents(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.contents.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.contents(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex flex-row align-items-center">
+                                    {{ form.unit_price.label(class="form-control-label") }}
+                                </div><p class="text-danger"><b>Required Field</b></p>
+                            </div>
+                            {% if form.unit_price.errors %}
+                                {{ form.unit_price(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.unit_price.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.unit_price(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex flex-row align-items-center">
+                                    {{ form.picture.label() }}
+                                </div><p class="text-danger"><b>Required Field</b></p>
+                            </div>
+                            {{ form.picture(class="form-control-file") }}
+                            {% if form.picture.errors %}
+                                {% for error in form.picture.errors %}
+                                    <br>   
+                                    <span class="text-danger">{{ error }}</span></br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-info") }}
+                    </div>
+                    <p class="text-danger">Once created, this order will be automatically set as an active order, available to purchase by consumers.</p>
+                </form>
+            </div>
+
+        </div>
+
+    {% endblock main_content %}

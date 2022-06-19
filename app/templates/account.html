@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+
+    {% block main_content %}
+        <div style="padding-left: 0px; padding-right: 0px; padding-bottom: 0px;" class="mt-5 container">
+            <div class="content-section">
+                <div class="media">
+                    <img class="rounded-circle account-img" src="{{ url_for('static', filename='profile_pics/default.jpg') }}">
+                    <div class="media-body">
+                        <p class="h2">{{ current_user.email }}</p>
+                        <p class="h5 mt-4">Admin Status: {% if current_user.is_admin %}<h5 class="text-success">True</h5>{% else %}<h5 class="text-danger">False</h5>{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    {% endblock main_content %}
